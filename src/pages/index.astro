@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import NoteLatestPosts from '@/components/NoteLatestPosts.astro';
+import { getCollection } from 'astro:content';
+
+// 全カテゴリから最新記事を取得（draft除外・日付降順）
+const allCards    = await getCollection('cards',    ({ data }) => !data.draft);
+const allHotels   = await getCollection('hotels',   ({ data }) => !data.draft);
+const allStrategy = await getCollection('strategy', ({ data }) => !data.draft);
+
+const allPosts = [
+  ...allCards.map(e => ({ ...e, category: 'cards' as const })),
+  ...allHotels.map(e => ({ ...e, category: 'hotels' as const })),
+  ...allStrategy.map(e => ({ ...e, category: 'strategy' as const })),
+].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const latestPosts = allPosts.slice(0, 6);
+
+// note.com アカウントID（変更してください）
+const NOTE_ACCOUNT_ID = 'your-note-account';
+---
+
+<BaseLayout title="【週6勤務の限界旅行好き】ホテル・マイル活用法">
+  <!-- Hero -->
+  <section class="text-center py-12 sm:py-16 mb-12">
+    <span class="inline-block text-brand-gold text-4xl mb-4">✦</span>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 text-gray-900 dark:text-gray-50">
+      週6勤務でも<br />最高の旅ができる
+    </h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto leading-relaxed">
+      忙しい30代のためのマイル・ホテルポイント・クレジットカード活用術。
+      限られた休みで、ビジネスクラスとラグジュアリーホテルを手に入れる方法を実体験から解説。
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3 mt-8">
+      <a href="/blog/cards"    class="px-5 py-2.5 rounded-xl bg-brand-gold text-white font-semibold hover:bg-brand-gold-light transition-colors text-sm">カードを選ぶ</a>
+      <a href="/blog/strategy" class="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-brand-navy-light transition-colors text-sm">戦略を学ぶ</a>
+    </div>
+  </section>
+
+  <!-- Stats bar -->
+  <div class="grid grid-cols-3 gap-4 mb-12 p-4 rounded-2xl bg-gray-50 dark:bg-brand-navy-light">
+    {[
+      { value: '週6', label: '勤務日数' },
+      { value: '年6回', label: '海外旅行' },
+      { value: '毎回', label: 'ビジネス or スイート' },
+    ].map(({ value, label }) => (
+      <div class="text-center">
+        <p class="text-2xl font-bold text-brand-gold">{value}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{label}</p>
+      </div>
+    ))}
+  </div>
+
+  <!-- Main Content + Sidebar -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Posts -->
+    <div class="lg:col-span-2">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">最新記事</h2>
+        <a href="/blog" class="text-sm text-brand-gold dark:text-brand-gold-light hover:underline">すべて見る</a>
+      </div>
+      <div class="space-y-2">
+        {latestPosts.map(post => (
+          <BlogCard
+            title={post.data.title}
+            description={post.data.description}
+            href={`/blog/${post.category}/${post.slug}`}
+            pubDate={post.data.pubDate}
+            category={post.category}
+            heroImage={post.data.heroImage}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="space-y-6">
+      <!-- note.com 最新記事 -->
+      <NoteLatestPosts accountId={NOTE_ACCOUNT_ID} limit={5} />
+
+      <!-- カテゴリナビ -->
+      <div class="rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">カテゴリ</p>
+        <ul class="space-y-2">
+          {[
+            { href: '/blog/cards',    icon: '💳', label: 'クレジットカード', count: allCards.length },
+            { href: '/blog/hotels',   icon: '🏨', label: 'ホテル宿泊記',     count: allHotels.length },
+            { href: '/blog/strategy', icon: '✈️', label: 'マイル戦略',       count: allStrategy.length },
+          ].map(({ href, icon, label, count }) => (
+            <li>
+              <a href={href} class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-brand-navy-light transition-colors text-sm group">
+                <span class="flex items-center gap-2 text-gray-700 dark:text-gray-300 group-hover:text-brand-gold dark:group-hover:text-brand-gold-light transition-colors">
+                  <span>{icon}</span>{label}
+                </span>
+                <span class="text-xs text-gray-400">{count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

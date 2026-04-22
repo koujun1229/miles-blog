@@ -1,0 +1,105 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
+import CategoryBadge from '@/components/CategoryBadge.astro';
+import type { CollectionEntry } from 'astro:content';
+
+type CardEntry    = CollectionEntry<'cards'>;
+type HotelEntry   = CollectionEntry<'hotels'>;
+type StrategyEntry = CollectionEntry<'strategy'>;
+
+interface Props {
+  entry: CardEntry | HotelEntry | StrategyEntry;
+  category: 'cards' | 'hotels' | 'strategy';
+}
+
+const { entry, category } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, hasAffiliate } = entry.data;
+
+const dateFormatter = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const categoryLabel: Record<string, string> = {
+  cards:    'クレジットカード',
+  hotels:   'ホテル宿泊記',
+  strategy: 'マイル戦略',
+};
+---
+
+<BaseLayout {title} {description} type="article" {pubDate} {updatedDate}>
+  <article class="max-w-3xl mx-auto">
+    <!-- Hero Image -->
+    {heroImage && (
+      <div class="rounded-2xl overflow-hidden mb-8 aspect-video">
+        <img
+          src={heroImage}
+          alt={title}
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+      </div>
+    )}
+
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex items-center gap-3 mb-4">
+        <CategoryBadge {category} />
+        {hasAffiliate && (
+          <span class="text-xs text-amber-600 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded">
+            PR / 広告含む
+          </span>
+        )}
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-4 text-gray-900 dark:text-gray-50">
+        {title}
+      </h1>
+
+      <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+        {description}
+      </p>
+
+      <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500 border-t border-gray-100 dark:border-gray-800 pt-4">
+        <time datetime={pubDate.toISOString()}>
+          公開：{dateFormatter.format(pubDate)}
+        </time>
+        {updatedDate && (
+          <time datetime={updatedDate.toISOString()}>
+            更新：{dateFormatter.format(updatedDate)}
+          </time>
+        )}
+      </div>
+    </header>
+
+    <!-- 広告開示（hasAffiliate=true の場合のみ記事冒頭にも表示） -->
+    {hasAffiliate && <AffiliateDisclosure variant="inline" />}
+
+    <!-- Article Body -->
+    <div class="prose prose-lg dark:prose-invert max-w-none
+      prose-headings:font-bold prose-headings:tracking-tight
+      prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6
+      prose-h2:border-l-4 prose-h2:border-brand-gold prose-h2:pl-4
+      prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
+      prose-a:text-brand-gold dark:prose-a:text-brand-gold-light prose-a:no-underline hover:prose-a:underline
+      prose-blockquote:border-l-brand-gold
+      prose-img:rounded-xl">
+      <slot />
+    </div>
+
+    <!-- 記事末尾 広告開示（固定表示） -->
+    {hasAffiliate && <AffiliateDisclosure variant="footer" />}
+
+    <!-- ナビゲーション -->
+    <nav class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800">
+      <a
+        href={`/blog/${category}`}
+        class="inline-flex items-center gap-2 text-brand-gold dark:text-brand-gold-light hover:underline text-sm font-medium"
+      >
+        ← {categoryLabel[category]}の記事一覧へ
+      </a>
+    </nav>
+  </article>
+</BaseLayout>

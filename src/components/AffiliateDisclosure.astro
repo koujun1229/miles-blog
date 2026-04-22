@@ -1,0 +1,44 @@
+---
+/**
+ * AffiliateDisclosure.astro
+ * hasAffiliate: true の記事に自動挿入される広告開示コンポーネント。
+ * BlogPostLayout.astro が自動で呼び出すため、個別記事で書く必要はない。
+ *
+ * variant="inline"  → 記事冒頭（小さめ）
+ * variant="footer"  → 記事末尾（詳細）
+ */
+interface Props {
+  variant?: 'inline' | 'footer';
+}
+
+const { variant = 'inline' } = Astro.props;
+---
+
+{variant === 'inline' && (
+  <aside class="not-prose flex items-start gap-2.5 px-4 py-3 mb-8 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200">
+    <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+    </svg>
+    <p>
+      この記事にはアフィリエイト広告（A8.net等）が含まれています。
+      記事内容は独自の評価・実体験に基づいており、広告主から内容の指示は受けていません。
+    </p>
+  </aside>
+)}
+
+{variant === 'footer' && (
+  <aside class="not-prose mt-12 px-5 py-5 rounded-2xl bg-gray-50 dark:bg-brand-navy-light border border-gray-100 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-400">
+    <p class="font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-1.5">
+      <svg class="w-4 h-4 text-brand-gold" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+      </svg>
+      広告・アフィリエイトに関する開示
+    </p>
+    <ul class="space-y-1 list-none pl-0">
+      <li>・ 本記事はA8.netをはじめとするアフィリエイトプログラムに参加しています。</li>
+      <li>・ 記事内のリンクから商品・サービスをお申し込みいただくと、当サイトに報酬が発生する場合があります。</li>
+      <li>・ 広告報酬は記事の評価・内容に一切影響しません。実際の利用経験に基づいて執筆しています。</li>
+      <li>・ 最新の情報・条件は必ず公式サイトでご確認ください。</li>
+    </ul>
+  </aside>
+)}

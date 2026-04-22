@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "miles-blog",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": ["/Users/hyon/miles-blog/node_modules/.bin/astro", "dev", "--port", "4322"],
+      "cwd": "/Users/hyon/miles-blog",
+      "port": 4322
+    }
+  ]
+}

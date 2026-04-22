@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('cards', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout
+  title="クレジットカードレビュー"
+  description="アメックス・SPGアメックス・ANAカードなど、マイルが貯まるクレジットカードの実体験レビュー。年会費と特典を徹底比較。"
+>
+  <header class="mb-8">
+    <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
+      <a href="/" class="hover:text-brand-gold transition-colors">トップ</a>
+      <span>›</span>
+      <span>クレジットカード</span>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-2">💳 クレジットカードレビュー</h1>
+    <p class="text-gray-500 dark:text-gray-400">
+      マイルが貯まるカードを実際に使って比較。年会費・ポイント還元率・特典を正直に評価します。
+    </p>
+  </header>
+
+  <div class="space-y-2">
+    {posts.map(post => (
+      <BlogCard
+        title={post.data.title}
+        description={post.data.description}
+        href={`/blog/cards/${post.slug}`}
+        pubDate={post.data.pubDate}
+        category="cards"
+        heroImage={post.data.heroImage}
+        tags={post.data.tags}
+      />
+    ))}
+  </div>
+</BaseLayout>

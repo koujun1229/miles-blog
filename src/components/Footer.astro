@@ -1,0 +1,40 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-gray-100 dark:border-gray-800 mt-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-8 text-sm">
+      <div>
+        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-3">カテゴリ</p>
+        <ul class="space-y-2 text-gray-500 dark:text-gray-400">
+          <li><a href="/blog/cards" class="hover:text-brand-gold transition-colors">クレジットカード</a></li>
+          <li><a href="/blog/hotels" class="hover:text-brand-gold transition-colors">ホテル宿泊記</a></li>
+          <li><a href="/blog/strategy" class="hover:text-brand-gold transition-colors">マイル戦略</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-3">サイト情報</p>
+        <ul class="space-y-2 text-gray-500 dark:text-gray-400">
+          <li><a href="/about" class="hover:text-brand-gold transition-colors">このサイトについて</a></li>
+          <li><a href="/privacy" class="hover:text-brand-gold transition-colors">プライバシーポリシー</a></li>
+          <li><a href="/disclosure" class="hover:text-brand-gold transition-colors">広告掲載について</a></li>
+        </ul>
+      </div>
+      <div class="col-span-2 sm:col-span-1">
+        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-3">フィード</p>
+        <ul class="space-y-2 text-gray-500 dark:text-gray-400">
+          <li><a href="/rss.xml" class="hover:text-brand-gold transition-colors">RSS</a></li>
+          <li><a href="/sitemap-index.xml" class="hover:text-brand-gold transition-colors">サイトマップ</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-100 dark:border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-400">
+      <p>
+        当サイトはアフィリエイト広告（A8.net等）を利用しています。
+      </p>
+      <p>© {year} 限界旅行好きのマイル活用法</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,30 @@
+---
+interface Props {
+  category: 'cards' | 'hotels' | 'strategy';
+  size?: 'sm' | 'md';
+}
+
+const { category, size = 'sm' } = Astro.props;
+
+const config: Record<string, { label: string; classes: string }> = {
+  cards: {
+    label: 'クレジットカード',
+    classes: 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  },
+  hotels: {
+    label: 'ホテル宿泊記',
+    classes: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+  },
+  strategy: {
+    label: 'マイル戦略',
+    classes: 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  },
+};
+
+const { label, classes } = config[category];
+const sizeClasses = size === 'sm' ? 'text-xs px-2 py-0.5' : 'text-sm px-3 py-1';
+---
+
+<span class:list={['inline-block rounded-full font-medium', sizeClasses, classes]}>
+  {label}
+</span>

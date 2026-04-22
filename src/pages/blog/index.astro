@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allCards    = await getCollection('cards',    ({ data }) => !data.draft);
+const allHotels   = await getCollection('hotels',   ({ data }) => !data.draft);
+const allStrategy = await getCollection('strategy', ({ data }) => !data.draft);
+
+const allPosts = [
+  ...allCards.map(e => ({ ...e, category: 'cards' as const })),
+  ...allHotels.map(e => ({ ...e, category: 'hotels' as const })),
+  ...allStrategy.map(e => ({ ...e, category: 'strategy' as const })),
+].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="すべての記事" description="マイル・ホテル・クレジットカードに関する記事一覧">
+  <h1 class="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-50">すべての記事</h1>
+  <p class="text-gray-500 dark:text-gray-400 mb-8">{allPosts.length}件</p>
+
+  <div class="space-y-2">
+    {allPosts.map(post => (
+      <BlogCard
+        title={post.data.title}
+        description={post.data.description}
+        href={`/blog/${post.category}/${post.slug}`}
+        pubDate={post.data.pubDate}
+        category={post.category}
+        heroImage={post.data.heroImage}
+        tags={post.data.tags}
+      />
+    ))}
+  </div>
+</BaseLayout>

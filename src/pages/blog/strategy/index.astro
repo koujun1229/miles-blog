@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('strategy', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout
+  title="マイル戦略・決済最適化"
+  description="忙しい30代向けのマイル・ポイント活用戦略。日常の決済を見直して、効率よく飛行機・ホテルを無料にする方法。"
+>
+  <header class="mb-8">
+    <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
+      <a href="/" class="hover:text-brand-gold transition-colors">トップ</a>
+      <span>›</span>
+      <span>マイル戦略</span>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-2">✈️ マイル戦略・決済最適化</h1>
+    <p class="text-gray-500 dark:text-gray-400">
+      日常の出費を最適化してマイルを最大効率で貯める方法。週6勤務でも実践できる現実的な戦略を解説。
+    </p>
+  </header>
+
+  <div class="space-y-2">
+    {posts.map(post => (
+      <BlogCard
+        title={post.data.title}
+        description={post.data.description}
+        href={`/blog/strategy/${post.slug}`}
+        pubDate={post.data.pubDate}
+        category="strategy"
+        heroImage={post.data.heroImage}
+        tags={post.data.tags}
+      />
+    ))}
+  </div>
+</BaseLayout>

@@ -1,0 +1,18 @@
+# Cloudflare Pages デプロイ設定
+# `wrangler pages deploy dist` でデプロイ
+
+name = "miles-blog"
+compatibility_date = "2024-09-23"
+
+# Pages プロジェクト設定
+[env.production]
+# 本番環境の環境変数はCloudflare Dashboardで管理
+# NOTE_RSS_URL = "https://note.com/your-account/rss"
+
+[env.preview]
+# プレビュー環境
+
+# ビルドコマンド設定（Cloudflare Pages Dashboard でも設定可能）
+# Build command : npm run build
+# Build output  : dist
+# Root directory: /

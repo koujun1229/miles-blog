@@ -1,0 +1,97 @@
+---
+/**
+ * AffiliateLink.astro
+ * MDX記事内でA8.netなどのアフィリエイトタグを安全に埋め込むコンポーネント。
+ *
+ * 使用例（MDX内）:
+ *   import AffiliateLink from '@/components/AffiliateLink.astro';
+ *
+ *   <!-- テキストリンク -->
+ *   <AffiliateLink
+ *     href="https://px.a8.net/svt/ejp?a8mat=..."
+ *     label="アメックスゴールドプリファードの公式サイトを見る"
+ *   />
+ *
+ *   <!-- 画像バナー（A8.netのimgタグをそのまま貼る場合） -->
+ *   <AffiliateLink
+ *     href="https://px.a8.net/svt/ejp?a8mat=..."
+ *     label="アメックス公式"
+ *     imageUrl="https://www23.a8.net/svt/bgt?aid=...&wid=001&eno=01&mid=s..."
+ *     imageWidth={728}
+ *     imageHeight={90}
+ *   />
+ */
+
+interface Props {
+  href: string;
+  label: string;
+  imageUrl?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  variant?: 'button' | 'text' | 'banner';
+}
+
+const {
+  href,
+  label,
+  imageUrl,
+  imageWidth = 728,
+  imageHeight = 90,
+  variant = imageUrl ? 'banner' : 'button',
+} = Astro.props;
+---
+
+<div class="affiliate-link not-prose my-6">
+  {variant === 'banner' && imageUrl && (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener nofollow sponsored"
+      aria-label={`${label}（広告）`}
+      class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity"
+    >
+      <img
+        src={imageUrl}
+        alt={label}
+        width={imageWidth}
+        height={imageHeight}
+        loading="lazy"
+        decoding="async"
+        class="w-full h-auto"
+      />
+    </a>
+  )}
+
+  {variant === 'button' && (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener nofollow sponsored"
+      class="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-xl
+             bg-brand-gold hover:bg-brand-gold-light active:scale-95
+             text-white font-bold text-base shadow-md hover:shadow-lg
+             transition-all duration-200"
+    >
+      {label}
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+    </a>
+  )}
+
+  {variant === 'text' && (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener nofollow sponsored"
+      class="inline-flex items-center gap-1 text-brand-gold dark:text-brand-gold-light underline underline-offset-2 hover:no-underline font-medium"
+    >
+      {label}（広告）
+    </a>
+  )}
+
+  <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-600">
+    ※ 広告リンク。公式サイトに移動します。
+  </p>
+</div>

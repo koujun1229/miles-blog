@@ -1,0 +1,68 @@
+---
+import CategoryBadge from './CategoryBadge.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  pubDate: Date;
+  category: 'cards' | 'hotels' | 'strategy';
+  heroImage?: string;
+  tags?: string[];
+}
+
+const { title, description, href, pubDate, category, heroImage, tags = [] } = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<article class="group">
+  <a {href} class="flex flex-col sm:flex-row gap-4 p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-brand-navy-light transition-colors -mx-4">
+    <!-- Thumbnail -->
+    {heroImage && (
+      <div class="sm:w-40 sm:h-28 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800">
+        <img
+          src={heroImage}
+          alt=""
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    )}
+    {!heroImage && (
+      <div class="hidden sm:flex sm:w-40 sm:h-28 rounded-xl flex-shrink-0 bg-gradient-to-br from-brand-gold/20 to-brand-gold/5 items-center justify-center">
+        <span class="text-brand-gold text-3xl">✦</span>
+      </div>
+    )}
+
+    <!-- Content -->
+    <div class="flex-1 min-w-0 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <CategoryBadge {category} />
+          <time datetime={pubDate.toISOString()} class="text-xs text-gray-400">
+            {dateFormatter.format(pubDate)}
+          </time>
+        </div>
+        <h2 class="font-bold text-gray-900 dark:text-gray-100 leading-snug mb-1 group-hover:text-brand-gold dark:group-hover:text-brand-gold-light transition-colors line-clamp-2">
+          {title}
+        </h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+          {description}
+        </p>
+      </div>
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-1 mt-2">
+          {tags.slice(0, 3).map(tag => (
+            <span class="text-xs text-gray-400 dark:text-gray-600">#{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </a>
+</article>

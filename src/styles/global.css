@@ -1,0 +1,124 @@
+/* グローバルスタイル — Tailwind ベースレイヤーの後に読み込まれる */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  :root {
+    --color-brand-gold: #C9A84C;
+    --color-brand-gold-light: #E8C96A;
+    --color-brand-navy: #0D1B2A;
+    --color-brand-navy-light: #1A2E42;
+  }
+
+  /* スクロールバー（Chrome / Safari） */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #C9A84C55;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C9A84C99;
+  }
+
+  /* フォーカスリング */
+  *:focus-visible {
+    outline: 2px solid var(--color-brand-gold);
+    outline-offset: 2px;
+  }
+
+  /* 選択テキスト */
+  ::selection {
+    background: #C9A84C33;
+    color: inherit;
+  }
+}
+
+/* ============================================================
+   Components
+   ============================================================ */
+@layer components {
+  /* prose（記事本文）カスタマイズ */
+  .prose {
+    line-height: 1.9;
+  }
+
+  /* H2 見出し：ゴールドの左ボーダー */
+  .prose h2 {
+    @apply border-l-4 pl-4;
+    border-color: var(--color-brand-gold);
+  }
+
+  /* テーブルのゼブラ */
+  .prose table tr:nth-child(even) {
+    @apply bg-gray-50 dark:bg-gray-800/50;
+  }
+
+  /* コードブロック */
+  .prose pre {
+    @apply rounded-xl text-sm;
+  }
+
+  /* インラインコード */
+  .prose code:not(pre > code) {
+    @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+    @apply text-gray-800 dark:text-gray-200;
+  }
+
+  /* ブロッククォート */
+  .prose blockquote {
+    @apply not-italic text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-brand-navy-light rounded-r-xl py-2;
+    border-left-color: var(--color-brand-gold);
+  }
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+@layer utilities {
+  /* テキストグラデーション（ゴールド） */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* カードシャドウ */
+  .card-shadow {
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.06), 0 4px 16px rgb(0 0 0 / 0.04);
+  }
+  .dark .card-shadow {
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.2);
+  }
+
+  /* 2行クランプ */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    animation: fadeIn 0.4s ease-out both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
