@@ -18,7 +18,9 @@ interface Props {
 }
 
 const { accountId, limit = 5 } = Astro.props;
-const posts = await fetchNoteRSS(accountId, limit);
+// プレースホルダーの場合はフェッチしない
+const isPlaceholder = !accountId || accountId === 'your-note-account';
+const posts = isPlaceholder ? [] : await fetchNoteRSS(accountId, limit);
 
 const dateFormatter = new Intl.DateTimeFormat('ja-JP', { month: 'short', day: 'numeric' });
 ---

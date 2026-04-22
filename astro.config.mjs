@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  site: 'https://miles-blog.pages.dev', // ← Cloudflare Pages のドメインに変更してください
+  site: 'https://miles-blog.pages.dev',
   integrations: [
     mdx(),
     sitemap(),

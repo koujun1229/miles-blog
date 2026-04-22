@@ -13,10 +13,12 @@ export async function GET(context: APIContext) {
     ...strategy.map(e => ({ ...e, category: 'strategy' })),
   ].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+  const siteUrl = context.site?.toString() ?? 'https://miles-blog.pages.dev';
+
   return rss({
     title: '【週6勤務の限界旅行好き】ホテル・マイル活用法',
     description: '忙しい30代のためのマイル・ホテルポイント・クレジットカード活用術。',
-    site: context.site!,
+    site: siteUrl,
     items: allPosts.map(post => ({
       title:       post.data.title,
       pubDate:     post.data.pubDate,
